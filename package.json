@@ -1,0 +1,42 @@
+{
+  "name": "shiperra",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www",
+    "test": "mocha || true"
+  },
+  "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.3.32",
+    "@stdlib/stats-wilcoxon": "^0.0.7",
+    "chai": "^4.3.7",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^16.3.1",
+    "express": "~4.16.1",
+    "express-validator": "^7.0.1",
+    "firebase-admin": "^11.9.0",
+    "googleapis": "^118.0.0",
+    "http-errors": "~1.6.3",
+    "ics": "^3.2.0",
+    "jade": "~1.11.0",
+    "libphonenumber-js": "^1.10.37",
+    "mathjs": "^11.8.2",
+    "mocha": "^10.2.0",
+    "moment": "^2.29.4",
+    "morgan": "~1.9.1",
+    "mqtt": "^4.3.7",
+    "node-cron": "^3.0.2",
+    "openai": "^3.3.0",
+    "phone": "^3.1.37",
+    "simple-statistics": "^7.8.3",
+    "twilio": "^4.11.2",
+    "winston": "^3.9.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.44.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.27.5"
+  }
+}
