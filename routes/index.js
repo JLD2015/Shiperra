@@ -15,7 +15,7 @@ const username = process.env.MQTT_USERNAME;
 const password = process.env.MQTT_PASSWORD;
 
 // Create the client
-const client = mqtt.connect('mqtts://o666bde0.ala.us-east-1.emqxsl.com:8883', {
+const client = mqtt.connect('mqtt://mqtt.shiperra.com:1883', {
   clientId,
   username,
   password,
