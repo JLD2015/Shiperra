@@ -38,7 +38,6 @@ client.subscribe('/trucks/record', { qos }, (error) => {
 client.on('message', (topic, payload) => {
   // Parse data
   if (topic === '/trucks/record') {
-    console.log('Came in here');
     const data = JSON.parse(payload.toString());
     const {
       deviceID, batteryV1, batteryV2, latitude, longitude,
