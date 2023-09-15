@@ -1,4 +1,5 @@
 const winston = require('winston');
+const { Timestamp, GeoPoint } = require('firebase-admin/firestore');
 const firebaseAdmin = require('../firebase/firebase');
 
 const db = firebaseAdmin.firestore();
@@ -56,33 +57,49 @@ function recordTruckData(deviceID, batteryV1, batteryV2, latitude, longitude, ca
     callback('longitude must be between -180 and 180');
   }
 
+  // Record entry
+  const mostRecentData = {
+    lastTimestamp: Timestamp.fromDate(new Date()),
+    lastBatteryV1: batteryV1Float,
+    lastBatteryV2: batteryV2Float,
+    lastLocation: new GeoPoint(latitudeFloat, longitudeFloat),
+  };
+
   const data = {
-    timestamp: new Date().toISOString(),
+    timestamp: Timestamp.fromDate(new Date()),
     batteryV1: batteryV1Float,
     batteryV2: batteryV2Float,
-    latitude: latitudeFloat,
-    longitude: longitudeFloat,
+    location: new GeoPoint(latitudeFloat, longitudeFloat),
   };
+
+  const deviceRef = db
+    .collection('deviceLogs')
+    .doc(deviceID);
 
   const deviceLogRef = db
     .collection('deviceLogs')
     .doc(deviceID)
     .collection('logs');
 
-  deviceLogRef
-    .add(data)
-    .then(() => {
-      logger.info('Data saved to Firestore successfully');
-      callback('success');
+  deviceRef.set(mostRecentData).then(() => {
+    deviceLogRef
+      .add(data)
+      .then(() => {
+        logger.info('Data saved to Firestore successfully');
+        callback('success');
 
-      // Every time new data comes in we must check whether the truck is on an unrecognised route
-      checkRegularRoutesFunction(deviceID);
-    })
-    .catch((error) => {
-      logger.error('Failed to save data to Firestore', error);
-      callback('Failed to save data to Firestore');
-    });
-  return null;
+        // Every time new data comes in we must check whether the truck is on an unrecognised route
+        checkRegularRoutesFunction(deviceID);
+      })
+      .catch((error) => {
+        logger.error('Failed to save data to Firestore', error);
+        callback('Failed to save data to Firestore');
+      });
+    return null;
+  }).catch((error) => {
+    logger.error('Failed to save data to Firestore', error);
+    callback('Failed to save data to Firestore');
+  });
 }
 
 module.exports = { recordTruckData };
