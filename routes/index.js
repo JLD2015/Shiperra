@@ -40,9 +40,9 @@ client.on('message', (topic, payload) => {
   if (topic === '/trucks/record') {
     const data = JSON.parse(payload.toString());
     const {
-      deviceID, batteryV1, batteryV2, latitude, longitude,
+      ID, bat1, bat2, st, lat, long,
     } = data;
-    recordTruckData(deviceID, batteryV1, batteryV2, latitude, longitude, (status) => {
+    recordTruckData(ID, bat1, bat2, st, lat, long, (status) => {
       // Respond with status
       const replyTopic = '/trucks/record/response';
       const replyPayload = status;
