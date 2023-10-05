@@ -65,7 +65,7 @@ function readDataFromLocalCache(deviceID) {
   }
 
   // Read and parse the data from the file
-  const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  const data = JSON.parse(fs2.readFileSync(filePath, 'utf-8'));
   return data;
 }
 
