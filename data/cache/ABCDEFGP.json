@@ -1,0 +1,15 @@
+[
+  {
+    "timestamp": {
+      "_seconds": 1696512710,
+      "_nanoseconds": 926000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": -25.78507,
+      "_longitude": 28.232819
+    }
+  }
+]

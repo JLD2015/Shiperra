@@ -1,4 +1,5 @@
-const fs = require('fs');
+const fs = require('fs').promises;
+const fs2 = require('fs');
 const path = require('path');
 const ss = require('simple-statistics');
 const { sendPushNotification } = require('./sendPushNotification');
@@ -58,7 +59,7 @@ function readDataFromLocalCache(deviceID) {
   const filePath = path.join(fullPath, `${deviceID}.json`);
 
   // If the file doesn't exist, return an empty array or a relevant message
-  if (!fs.existsSync(filePath)) {
+  if (!fs2.existsSync(filePath)) {
     console.error(`No data found for device ${deviceID} at ${filePath}`);
     return [];
   }
