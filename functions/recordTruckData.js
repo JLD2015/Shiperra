@@ -22,6 +22,7 @@ function recordTruckData(
   longitude,
   callback,
 ) {
+  // <========== Validate Variables ==========>
   // Make sure deviceID is present
   if (!deviceID || deviceID.trim() === '') {
     callback('deviceID is required');
@@ -81,7 +82,7 @@ function recordTruckData(
     callback('longitude must be between -180 and 180');
   }
 
-  // Record entry
+  // <========== Record Data ==========>
   const mostRecentData = {
     lastTimestamp: Timestamp.fromDate(new Date()),
     lastBatteryV1: batteryV1Float,
@@ -114,7 +115,7 @@ function recordTruckData(
         logger.info('Data saved to Firestore successfully');
         callback('success');
 
-        // Every time new data comes in we must check whether the truck is on an unrecognised route
+        // <========== Check Incomming Data ==========>
         checkRegularRoutesFunction(deviceID);
       })
       .catch((error) => {

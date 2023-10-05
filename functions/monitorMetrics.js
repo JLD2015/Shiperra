@@ -2,7 +2,7 @@ const fs = require('fs').promises;
 const path = require('path');
 const ss = require('simple-statistics');
 const firebaseAdmin = require('../firebase/firebase');
-const { truckInUnknownLocation, truckBatteryWarning } = require('./sendWhatsAppMessage');
+const { sendPushNotification } = require('./sendPushNotification');
 
 const db = firebaseAdmin.firestore();
 const distanceThreshold = 10;
@@ -94,7 +94,7 @@ async function monitorMetrics(registration) {
       const lastLocationTriggerTime = triggers.locationTriggers[registration] || 0;
 
       if (currentTime - lastLocationTriggerTime > 12 * 60 * 60 * 1000) {
-        await truckInUnknownLocation(registration);
+        sendPushNotification(registration, 'Location Warning', `Truck ${registration} is on a new route.`);
         triggers.locationTriggers[registration] = currentTime;
         await writeTriggersFile(triggers);
       }
@@ -122,7 +122,7 @@ async function monitorMetrics(registration) {
         const lastBatteryTriggerTime = triggers.batteryTriggers[registration] || 0;
 
         if (currentTime - lastBatteryTriggerTime > 12 * 60 * 60 * 1000) {
-          await truckBatteryWarning(registration, lastBatteryV1Voltage, lastBatteryV2Voltage);
+          sendPushNotification(registration, 'Battery Warning', `Truck ${registration} has a possible battery fault. The current battery voltages are ${lastBatteryV1Voltage}V and ${lastBatteryV2Voltage}V.`);
           triggers.batteryTriggers[registration] = currentTime;
           await writeTriggersFile(triggers);
         }
