@@ -11,5 +11,18 @@
       "_latitude": -25.78507,
       "_longitude": 28.232819
     }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696514058,
+      "_nanoseconds": 443000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": 25.78507,
+      "_longitude": 28.232819
+    }
   }
 ]

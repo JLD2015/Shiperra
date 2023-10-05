@@ -2,7 +2,7 @@ const fs = require('fs').promises;
 const fs2 = require('fs');
 const path = require('path');
 const ss = require('simple-statistics');
-const { sendPushNotification } = require('./sendPushNotification');
+const sendPushNotification = require('./sendPushNotification');
 
 const distanceThreshold = 10;
 const triggersFilePath = path.join(__dirname, '..', 'data', 'triggers.json');

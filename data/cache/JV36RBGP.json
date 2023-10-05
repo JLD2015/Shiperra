@@ -24,5 +24,31 @@
       "_latitude": -27.7268,
       "_longitude": 29.92952
     }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696513799,
+      "_nanoseconds": 964000000
+    },
+    "batteryV1": 11.97,
+    "batteryV2": 0,
+    "deviceStatus": "1143",
+    "location": {
+      "_latitude": -27.72681,
+      "_longitude": 29.92953
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696513830,
+      "_nanoseconds": 121000000
+    },
+    "batteryV1": 11.87,
+    "batteryV2": 0,
+    "deviceStatus": "1144",
+    "location": {
+      "_latitude": -27.72681,
+      "_longitude": 29.92953
+    }
   }
 ]
