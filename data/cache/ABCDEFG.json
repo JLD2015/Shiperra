@@ -1,0 +1,119 @@
+[
+  {
+    "timestamp": {
+      "_seconds": 1696510790,
+      "_nanoseconds": 136000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": -25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696511189,
+      "_nanoseconds": 357000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": -25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696511267,
+      "_nanoseconds": 309000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": -25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696511302,
+      "_nanoseconds": 849000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": -25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696511438,
+      "_nanoseconds": 301000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": -25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696511736,
+      "_nanoseconds": 847000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": -25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696511762,
+      "_nanoseconds": 859000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": -25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696512227,
+      "_nanoseconds": 603000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": -25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696512251,
+      "_nanoseconds": 968000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": -25.78507,
+      "_longitude": 28.232819
+    }
+  }
+]

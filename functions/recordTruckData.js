@@ -1,6 +1,8 @@
 const winston = require('winston');
 // eslint-disable-next-line
 const { Timestamp, GeoPoint } = require('firebase-admin/firestore');
+const fs = require('fs');
+const path = require('path');
 const firebaseAdmin = require('../firebase/firebase');
 
 const db = firebaseAdmin.firestore();
@@ -13,6 +15,52 @@ const logger = winston.createLogger({
   ],
 });
 
+// <========== Save Data Locally ==========>
+
+// Convert Firestore timestamp to milliseconds
+function convertTimestampToMilliseconds(timestampObj) {
+  /* eslint no-underscore-dangle: 0 */
+  return (timestampObj._seconds * 1000) + (timestampObj._nanoseconds / 1e6);
+}
+
+function saveDataToLocalCache(deviceID, data) {
+  const rootDir = 'data';
+  const cacheDir = 'cache';
+  const threeDaysInMilliseconds = 3 * 24 * 60 * 60 * 1000;
+
+  // Construct the path to our cache directory
+  const fullPath = path.join(__dirname, '..', rootDir, cacheDir);
+
+  // Ensure the cache directory exists
+  if (!fs.existsSync(fullPath)) {
+    fs.mkdirSync(fullPath, { recursive: true });
+  }
+
+  const filePath = path.join(fullPath, `${deviceID}.json`);
+  let currentData = [];
+
+  // If file exists, read the current data from the file
+  if (fs.existsSync(filePath)) {
+    currentData = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  }
+
+  // Filter out data entries older than 3 days
+  const now = Date.now();
+  currentData = currentData.filter((entry) => {
+    const entryTime = convertTimestampToMilliseconds(entry.timestamp);
+    return now - entryTime <= threeDaysInMilliseconds;
+  });
+
+  // Add new data to the array
+  currentData.push(data);
+
+  // Write updated data back to file
+  fs.writeFileSync(filePath, JSON.stringify(currentData, null, 2));
+
+  // console.log(`Data for device ${deviceID} saved locally at ${filePath}`);
+}
+
+// Function for recording truck data as it comes in
 function recordTruckData(
   deviceID,
   batteryV1,
@@ -115,7 +163,11 @@ function recordTruckData(
         logger.info('Data saved to Firestore successfully');
         callback('success');
 
+        // <========== Save incomming data to local cache ==========>
+        saveDataToLocalCache(deviceID, data);
+
         // <========== Check Incomming Data ==========>
+
         checkRegularRoutesFunction(deviceID);
       })
       .catch((error) => {

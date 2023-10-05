@@ -1,10 +1,8 @@
-const fs = require('fs').promises;
+const fs = require('fs');
 const path = require('path');
 const ss = require('simple-statistics');
-const firebaseAdmin = require('../firebase/firebase');
 const { sendPushNotification } = require('./sendPushNotification');
 
-const db = firebaseAdmin.firestore();
 const distanceThreshold = 10;
 const triggersFilePath = path.join(__dirname, '..', 'data', 'triggers.json');
 
@@ -50,86 +48,89 @@ async function readTriggersFile() {
   }
 }
 
+function readDataFromLocalCache(deviceID) {
+  const rootDir = 'data';
+  const cacheDir = 'cache';
+
+  // Construct the path to our cache directory
+  const fullPath = path.join(__dirname, '..', rootDir, cacheDir);
+
+  const filePath = path.join(fullPath, `${deviceID}.json`);
+
+  // If the file doesn't exist, return an empty array or a relevant message
+  if (!fs.existsSync(filePath)) {
+    console.error(`No data found for device ${deviceID} at ${filePath}`);
+    return [];
+  }
+
+  // Read and parse the data from the file
+  const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  return data;
+}
+
 async function monitorMetrics(registration) {
-  try {
-    const fiveDaysAgo = new Date();
-    fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
+  // Load the truck's metrics for the last 3 days
+  const deviceData = readDataFromLocalCache(registration);
 
-    const logsQuery = db.collection('deviceLogs')
-      .doc(registration)
-      .collection('logs')
-      .orderBy('timestamp', 'asc');
+  // Extract the voltages and locations arrays
+  const coordinatesArray = deviceData.map((entry) => ({
+    /* eslint no-underscore-dangle: 0 */
+    latitude: entry.location._latitude,
+    longitude: entry.location._longitude,
+  }));
 
-    const querySnapshot = await logsQuery.get();
-    const coordinatesArray = [];
-    const voltagesArray = [];
+  const voltagesArray = deviceData.map((entry) => ({
+    batteryV1: entry.batteryV1,
+    batteryV2: entry.batteryV2,
+  }));
 
-    querySnapshot.forEach((doc) => {
-      const logData = doc.data();
-      const logTimestamp = new Date(logData.timestamp);
+  // Make sure the latest coordinates are on a recognised route
+  const latestCoordinate = coordinatesArray.pop();
 
-      if (logTimestamp >= fiveDaysAgo) {
-        coordinatesArray.push({
-          latitude: logData.latitude,
-          longitude: logData.longitude,
-        });
-      }
+  const isOnRoute = coordinatesArray.some((coordinate) => {
+    const distance = calculateDistance(coordinate, latestCoordinate);
+    return distance <= distanceThreshold;
+  });
 
-      voltagesArray.push({
-        batteryV1: logData.batteryV1,
-        batteryV2: logData.batteryV2,
-      });
-    });
+  if (!isOnRoute) {
+    const currentTime = Date.now();
+    const triggers = await readTriggersFile();
+    const lastLocationTriggerTime = triggers.locationTriggers[registration] || 0;
 
-    const latestCoordinate = coordinatesArray.pop();
+    if (currentTime - lastLocationTriggerTime > 12 * 60 * 60 * 1000) {
+      sendPushNotification(registration, 'Location Warning', `Truck ${registration} is on a new route.`);
+      triggers.locationTriggers[registration] = currentTime;
+      await writeTriggersFile(triggers);
+    }
+  }
 
-    const isOnRoute = coordinatesArray.some((coordinate) => {
-      const distance = calculateDistance(coordinate, latestCoordinate);
-      return distance <= distanceThreshold;
-    });
+  const batteryV1Voltages = voltagesArray.map((voltages) => voltages.batteryV1);
+  const batteryV2Voltages = voltagesArray.map((voltages) => voltages.batteryV2);
+  const lastBatteryV1Voltage = batteryV1Voltages.pop();
+  const lastBatteryV2Voltage = batteryV2Voltages.pop();
 
-    if (!isOnRoute) {
+  if (batteryV1Voltages.length > 30) {
+    const meanV1 = ss.mean(batteryV1Voltages);
+    const standardDeviationV1 = ss.standardDeviation(batteryV1Voltages);
+    const meanV2 = ss.mean(batteryV2Voltages);
+    const standardDeviationV2 = ss.standardDeviation(batteryV2Voltages);
+
+    if (
+      lastBatteryV1Voltage < meanV1 - 0.5 * standardDeviationV1
+      || lastBatteryV1Voltage > meanV1 + 0.5 * standardDeviationV1
+      || lastBatteryV2Voltage < meanV2 - 0.5 * standardDeviationV2
+      || lastBatteryV2Voltage > meanV2 + 0.5 * standardDeviationV2
+    ) {
       const currentTime = Date.now();
       const triggers = await readTriggersFile();
-      const lastLocationTriggerTime = triggers.locationTriggers[registration] || 0;
+      const lastBatteryTriggerTime = triggers.batteryTriggers[registration] || 0;
 
-      if (currentTime - lastLocationTriggerTime > 12 * 60 * 60 * 1000) {
-        sendPushNotification(registration, 'Location Warning', `Truck ${registration} is on a new route.`);
-        triggers.locationTriggers[registration] = currentTime;
+      if (currentTime - lastBatteryTriggerTime > 12 * 60 * 60 * 1000) {
+        sendPushNotification(registration, 'Battery Warning', `Truck ${registration} has a possible battery fault. The current battery voltages are ${lastBatteryV1Voltage}V and ${lastBatteryV2Voltage}V.`);
+        triggers.batteryTriggers[registration] = currentTime;
         await writeTriggersFile(triggers);
       }
     }
-
-    const batteryV1Voltages = voltagesArray.map((voltages) => voltages.batteryV1);
-    const batteryV2Voltages = voltagesArray.map((voltages) => voltages.batteryV2);
-    const lastBatteryV1Voltage = batteryV1Voltages.pop();
-    const lastBatteryV2Voltage = batteryV2Voltages.pop();
-
-    if (batteryV1Voltages.length > 1) {
-      const meanV1 = ss.mean(batteryV1Voltages);
-      const standardDeviationV1 = ss.standardDeviation(batteryV1Voltages);
-      const meanV2 = ss.mean(batteryV2Voltages);
-      const standardDeviationV2 = ss.standardDeviation(batteryV2Voltages);
-
-      if (
-        lastBatteryV1Voltage < meanV1 - 0.5 * standardDeviationV1
-        || lastBatteryV1Voltage > meanV1 + 0.5 * standardDeviationV1
-        || lastBatteryV2Voltage < meanV2 - 0.5 * standardDeviationV2
-        || lastBatteryV2Voltage > meanV2 + 0.5 * standardDeviationV2
-      ) {
-        const currentTime = Date.now();
-        const triggers = await readTriggersFile();
-        const lastBatteryTriggerTime = triggers.batteryTriggers[registration] || 0;
-
-        if (currentTime - lastBatteryTriggerTime > 12 * 60 * 60 * 1000) {
-          sendPushNotification(registration, 'Battery Warning', `Truck ${registration} has a possible battery fault. The current battery voltages are ${lastBatteryV1Voltage}V and ${lastBatteryV2Voltage}V.`);
-          triggers.batteryTriggers[registration] = currentTime;
-          await writeTriggersFile(triggers);
-        }
-      }
-    }
-  } catch (error) {
-    throw new Error(`Error checking regular routes: ${error.message}`);
   }
 }
 
