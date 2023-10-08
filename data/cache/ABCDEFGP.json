@@ -1,8 +1,8 @@
 [
   {
     "timestamp": {
-      "_seconds": 1696512710,
-      "_nanoseconds": 926000000
+      "_seconds": 1696792994,
+      "_nanoseconds": 122000000
     },
     "batteryV1": 21.6,
     "batteryV2": 23.5,
@@ -14,14 +14,14 @@
   },
   {
     "timestamp": {
-      "_seconds": 1696514058,
-      "_nanoseconds": 443000000
+      "_seconds": 1696793001,
+      "_nanoseconds": 131000000
     },
     "batteryV1": 21.6,
     "batteryV2": 23.5,
     "deviceStatus": "106e",
     "location": {
-      "_latitude": 25.78507,
+      "_latitude": -25.78507,
       "_longitude": 28.232819
     }
   }

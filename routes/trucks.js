@@ -1,5 +1,9 @@
 const express = require('express');
 const winston = require('winston');
+const fs = require('fs');
+const path = require('path');
+// eslint-disable-next-line
+const { GeoPoint } = require('firebase-admin/firestore');
 const checkRegularRoutesFunction = require('../functions/monitorMetrics');
 const firebaseAdmin = require('../firebase/firebase');
 
@@ -23,6 +27,48 @@ router.get('/', (req, res) => {
   res.send('Trucks API is live');
 });
 
+// HTTPS method for getting truck location history
+// Utility function to extract GeoPoints from data
+const extractGeoPoints = (inputData) => inputData.map((entry) => new GeoPoint(
+  /* eslint no-underscore-dangle: 0 */
+  entry.location._latitude,
+  entry.location._longitude,
+));
+
+router.get('/getroutehistory', async (req, res) => {
+  const { deviceID } = req.query;
+
+  // Validate the deviceID
+  if (!deviceID || typeof deviceID !== 'string') {
+    return res.status(400).json({ error: 'Invalid deviceID provided.' });
+  }
+
+  // Construct paths for cache directory and target file
+  const rootDir = 'data';
+  const cacheDir = 'cache';
+  const fullPath = path.join(__dirname, '..', rootDir, cacheDir);
+  const filePath = path.join(fullPath, `${deviceID}.json`);
+
+  try {
+    if (!fs.existsSync(filePath)) {
+      console.error(`No data found for device ${deviceID} at ${filePath}`);
+      return res.status(404).json({ error: `No data found for device ${deviceID}` });
+    }
+
+    // Read and parse the data from the file
+    const rawData = fs.readFileSync(filePath, 'utf-8');
+    const data = JSON.parse(rawData);
+
+    // Extract GeoPoints and return them
+    const geoPoints = extractGeoPoints(data);
+    return res.json(geoPoints);
+  } catch (error) {
+    console.error(`Error retrieving data for device ${deviceID}: ${error.message}`);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// HTTPS method for recording truck data
 router.post('/record', (req, res) => {
   const {
     deviceID,
