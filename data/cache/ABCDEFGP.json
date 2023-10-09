@@ -24,5 +24,278 @@
       "_latitude": -25.78507,
       "_longitude": 28.232819
     }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696865067,
+      "_nanoseconds": 595000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": -25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696865328,
+      "_nanoseconds": 697000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": -25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696865485,
+      "_nanoseconds": 828000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": -25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696865612,
+      "_nanoseconds": 619000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": 25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696866149,
+      "_nanoseconds": 766000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": 25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696866200,
+      "_nanoseconds": 807000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": 25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696866225,
+      "_nanoseconds": 823000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": 25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696866387,
+      "_nanoseconds": 431000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": 25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696866491,
+      "_nanoseconds": 692000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": 25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696866741,
+      "_nanoseconds": 295000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": 25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696866776,
+      "_nanoseconds": 623000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": 25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696866834,
+      "_nanoseconds": 380000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": 25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696866843,
+      "_nanoseconds": 70000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": 25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696866948,
+      "_nanoseconds": 803000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": 25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696867126,
+      "_nanoseconds": 31000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": 25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696867209,
+      "_nanoseconds": 466000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": 25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696867249,
+      "_nanoseconds": 704000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": 25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696867358,
+      "_nanoseconds": 999000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": 25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696867365,
+      "_nanoseconds": 503000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": 25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696867769,
+      "_nanoseconds": 716000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": 25.78507,
+      "_longitude": 28.232819
+    }
+  },
+  {
+    "timestamp": {
+      "_seconds": 1696867778,
+      "_nanoseconds": 465000000
+    },
+    "batteryV1": 21.6,
+    "batteryV2": 23.5,
+    "deviceStatus": "106e",
+    "location": {
+      "_latitude": 25.78507,
+      "_longitude": 28.232819
+    }
   }
 ]

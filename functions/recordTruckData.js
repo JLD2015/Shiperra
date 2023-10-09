@@ -1,6 +1,6 @@
 const winston = require('winston');
 // eslint-disable-next-line
-const { Timestamp, GeoPoint } = require('firebase-admin/firestore');
+const { Timestamp, GeoPoint, FieldValue } = require('firebase-admin/firestore');
 const fs = require('fs');
 const path = require('path');
 const firebaseAdmin = require('../firebase/firebase');
@@ -60,8 +60,39 @@ function saveDataToLocalCache(deviceID, data) {
   // console.log(`Data for device ${deviceID} saved locally at ${filePath}`);
 }
 
+// <========== Get the last timestamp from the cache ==========>
+function convertFirebaseTimestampToDate(timestamp) {
+  const milliseconds = (timestamp._seconds * 1000) + (timestamp._nanoseconds / 1000000);
+  return new Date(milliseconds);
+}
+
+function getLastTimestampFromLocalCache(deviceID) {
+  const rootDir = 'data';
+  const cacheDir = 'cache';
+
+  // Construct the path to our cache directory
+  const fullPath = path.join(__dirname, '..', rootDir, cacheDir);
+  const filePath = path.join(fullPath, `${deviceID}.json`);
+
+  // If file exists, read the data from the file
+  if (fs.existsSync(filePath)) {
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+
+    if (data.length > 0) {
+      // Get the last entry's timestamp
+      const lastSavedTimestampObject = data[data.length - 1].timestamp;
+      const lastSavedTimestamp = convertFirebaseTimestampToDate(lastSavedTimestampObject);
+
+      return lastSavedTimestamp;
+    }
+  }
+
+  return null; // Return null if no timestamp is found
+}
+// <==========>
+
 // Function for recording truck data as it comes in
-function recordTruckData(
+async function recordTruckData(
   deviceID,
   batteryV1,
   batteryV2,
@@ -156,7 +187,60 @@ function recordTruckData(
     .doc(deviceID)
     .collection('logs');
 
-  deviceRef.set(mostRecentData).then(() => {
+  // Add a recent route point every 5 minutes
+  const lastSavedTimestamp = getLastTimestampFromLocalCache(deviceID);
+
+  const currentTime = new Date();
+
+  // Check if 5 minutes have passed
+  if (lastSavedTimestamp) {
+    const differenceInMinutes = (currentTime - lastSavedTimestamp) / 60; // Shoul;d be 60000
+
+    if (differenceInMinutes > 5) {
+      // Get the current routeHistory object
+      const snapshot = await deviceRef.get();
+      if (snapshot.empty) {
+        console.log('No matching documents.');
+        return;
+      }
+      const { routeHistory } = snapshot.data();
+
+      const routeHistoryNew = routeHistory;
+
+      // If route history doesnt exist yet
+      if (routeHistoryNew === undefined) {
+        await deviceRef.update({
+          routeHistory: [new GeoPoint(latitudeFloat, longitudeFloat)],
+        });
+        // If it does exist we need to append the array
+      } else {
+        // We need to remove the first item from the array if it is too long
+        if (routeHistoryNew.length > 288) {
+          routeHistoryNew.shift();
+          routeHistoryNew.push(new GeoPoint(latitudeFloat, longitudeFloat));
+        // Else we just add the data to the array
+        } else {
+          routeHistoryNew.push(new GeoPoint(latitudeFloat, longitudeFloat));
+        }
+
+        // We need to update the data on Firebase
+        await deviceRef.update({
+          routeHistory: routeHistoryNew,
+        });
+      }
+    }
+  }
+
+  // Update all Firebase values
+  deviceRef.update(
+    {
+      lastTimestamp: Timestamp.fromDate(new Date()),
+      lastBatteryV1: batteryV1Float,
+      lastBatteryV2: batteryV2Float,
+      lastDeviceStatus: deviceStatusInput,
+      lastLocation: new GeoPoint(latitudeFloat, longitudeFloat),
+    },
+  ).then(() => {
     deviceLogRef
       .add(data)
       .then(() => {
