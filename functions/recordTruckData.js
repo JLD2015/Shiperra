@@ -162,13 +162,6 @@ async function recordTruckData(
   }
 
   // <========== Record Data ==========>
-  const mostRecentData = {
-    lastTimestamp: Timestamp.fromDate(new Date()),
-    lastBatteryV1: batteryV1Float,
-    lastBatteryV2: batteryV2Float,
-    lastDeviceStatus: deviceStatusInput,
-    lastLocation: new GeoPoint(latitudeFloat, longitudeFloat),
-  };
 
   const data = {
     timestamp: Timestamp.fromDate(new Date()),
@@ -194,7 +187,7 @@ async function recordTruckData(
 
   // Check if 5 minutes have passed
   if (lastSavedTimestamp) {
-    const differenceInMinutes = (currentTime - lastSavedTimestamp) / 60; // Shoul;d be 60000
+    const differenceInMinutes = (currentTime - lastSavedTimestamp) / 60000;
 
     if (differenceInMinutes > 5) {
       // Get the current routeHistory object
